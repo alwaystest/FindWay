@@ -34,7 +34,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        LogUtil.d(TAG,"HELLO");
     }
 
 }
