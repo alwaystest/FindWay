@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">FindWay</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="station_to">目的地</string>
+    <string name="station_from">出发地</string>
+    <string name="to">TO</string>
+    <string name="start_query">开始查询</string>
+    <string name="loading">正在载入</string>
+    <string name="Transportation">中转站</string>
 </resources>
