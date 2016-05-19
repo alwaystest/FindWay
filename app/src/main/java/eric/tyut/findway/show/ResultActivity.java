@@ -3,6 +3,7 @@ package eric.tyut.findway.show;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ public class ResultActivity extends BaseActivity implements IViewShow{
     IPresenter mPresenter;
     ResultAdapter adapter;
 
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
     @Bind(R.id.recycler_view)
     RecyclerView resultList;
 
@@ -26,6 +30,7 @@ public class ResultActivity extends BaseActivity implements IViewShow{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
 
         mPresenter = new PresenterShow(this);
 
