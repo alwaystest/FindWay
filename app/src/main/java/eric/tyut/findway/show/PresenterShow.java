@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import eric.tyut.findway.model.Route;
 import eric.tyut.findway.util.LogUtil;
 
@@ -20,6 +22,7 @@ public class PresenterShow implements IPresenter {
     private static final String TAG = "PresenterShow";
     IViewShow mView;
 
+    @Inject
     public PresenterShow(IViewShow view) {
         mView = view;
     }

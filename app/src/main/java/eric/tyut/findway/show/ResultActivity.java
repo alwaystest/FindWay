@@ -9,14 +9,20 @@ import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import eric.tyut.findway.R;
 import eric.tyut.findway.base.BaseActivity;
+import eric.tyut.findway.di.DaggerShowComponent;
+import eric.tyut.findway.di.ShowModule;
 import eric.tyut.findway.model.Route;
 
 public class ResultActivity extends BaseActivity implements IViewShow{
+    @Inject
     IPresenter mPresenter;
+    @Inject
     ResultAdapter adapter;
 
     @Bind(R.id.toolbar)
@@ -31,8 +37,7 @@ public class ResultActivity extends BaseActivity implements IViewShow{
         setContentView(R.layout.activity_result);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
-        mPresenter = new PresenterShow(this);
+        DaggerShowComponent.builder().showModule(new ShowModule(this)).build().inject(this);
 
         String from = getIntent().getStringExtra("from");
         String to = getIntent().getStringExtra("to");

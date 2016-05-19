@@ -5,6 +5,8 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 
+import javax.inject.Inject;
+
 import eric.tyut.findway.base.AppContext;
 import eric.tyut.findway.util.LogUtil;
 
@@ -16,9 +18,10 @@ public class PresenterMain implements IPresenter {
     IViewMain mView;
     ModelMain modelMain;
 
-    public PresenterMain(IViewMain view) {
+    @Inject
+    public PresenterMain(IViewMain view, ModelMain modelMain) {
         mView = view;
-        modelMain = new ModelMain();
+        this.modelMain = modelMain;
     }
 
     @Override

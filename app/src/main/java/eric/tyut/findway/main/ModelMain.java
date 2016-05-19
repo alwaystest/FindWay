@@ -1,5 +1,6 @@
 package eric.tyut.findway.main;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -16,6 +17,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import dagger.Module;
+import dagger.Provides;
 import eric.tyut.findway.base.API;
 import eric.tyut.findway.base.AppContext;
 import eric.tyut.findway.util.LogUtil;
@@ -27,8 +32,9 @@ public class ModelMain {
     private static String TAG = "ModelMain";
     private RequestQueue mQueue;
 
-    public ModelMain() {
-        mQueue = Volley.newRequestQueue(AppContext.getContext());
+    @Inject
+    public ModelMain(Context context) {
+        mQueue = Volley.newRequestQueue(context);
     }
 
     /**

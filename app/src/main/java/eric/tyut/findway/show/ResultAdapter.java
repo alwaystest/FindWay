@@ -50,8 +50,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        if(cache.get(mData.get(position).getFromStation()) == null) {
-            holder.station.setText("Loading");
+        if (cache.get(mData.get(position).getFromStation()) == null) {
+            holder.station.setText(R.string.loading);
             StringRequest req = new StringRequest(Request.Method.POST, API.GET_STATION_NAME_BY_ID, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -59,7 +59,9 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
                         JSONObject json = new JSONObject(response.substring(1, response.length()));
                         String from = json.getString("name");
                         cache.put(mData.get(position).getFromStation(), from);
-                        holder.station.setText(from);
+                        if (holder.station.getText().equals(AppContext.getContext().getString(R.string.loading))) {
+                            holder.station.setText(from);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -73,7 +75,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
                 }
             };
             queue.add(req);
-        }else{
+        } else {
             holder.station.setText(cache.get(mData.get(position).getFromStation()));
         }
         holder.lineNo.setText(mData.get(position).getTrainNo());
@@ -90,8 +92,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         }
     }
 
-    public void addAll(List<Route> list){
-        if(mData != null){
+    public void addAll(List<Route> list) {
+        if (mData != null) {
             mData.addAll(list);
         }
     }
