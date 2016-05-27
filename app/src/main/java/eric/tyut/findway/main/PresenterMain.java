@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import javax.inject.Inject;
 
@@ -30,7 +31,7 @@ public class PresenterMain implements IPresenter {
     @Override
     public void onClickSearch() {
         String from = mView.getFrom();
-        final String to = mView.getTo();
+        String to = mView.getTo();
         LogUtil.d(TAG, from + "\t" + to);
         if (TextUtils.isEmpty(from) || TextUtils.isEmpty(to)) {
             mView.showError("输入不能为空");
@@ -43,19 +44,29 @@ public class PresenterMain implements IPresenter {
                 fromResponse = FromResponse;
                 ifAllComplete();
             }
-        }, null);
+        }, new ErrorListener());
         modelMain.loadTo(to, new Response.Listener<String>() {
             @Override
             public void onResponse(String ToResponse) {
                 toResponse = ToResponse;
                 ifAllComplete();
             }
-        }, null);
+        },  new ErrorListener());
     }
 
     public void ifAllComplete() {
         if (TextUtils.isEmpty(fromResponse) || TextUtils.isEmpty(toResponse)) return;
         mView.onLoadComplete();
         mView.showResult(fromResponse, toResponse);
+    }
+
+    class ErrorListener implements Response.ErrorListener {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            fromResponse = null;
+            toResponse = null;
+            mView.onLoadComplete();
+            mView.showError("网络故障");
+        }
     }
 }

@@ -8,5 +8,5 @@ public class API {
     public static final String API = SERVER_ADDRESS + "API/";
     public static final String GET_FROM = API + "getFrom";
     public static final String GET_TO = API + "getTo";
-    public static final String GET_STATION_NAME_BY_ID = API + "getNameById";
+    public static final String GET_STATION_BY_ID = API + "getStationById";
 }

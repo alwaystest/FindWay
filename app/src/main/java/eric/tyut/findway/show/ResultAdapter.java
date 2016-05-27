@@ -57,7 +57,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         if (cache.get(mData.get(position).getFromStation()) == null) {
             holder.station.setText(R.string.loading);
-            StringRequest req = new StringRequest(Request.Method.POST, API.GET_STATION_NAME_BY_ID, new Response.Listener<String>() {
+            StringRequest req = new StringRequest(Request.Method.POST, API.GET_STATION_BY_ID, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
