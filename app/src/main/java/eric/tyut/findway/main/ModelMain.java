@@ -1,7 +1,6 @@
 package eric.tyut.findway.main;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -19,10 +18,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import dagger.Module;
-import dagger.Provides;
 import eric.tyut.findway.base.API;
-import eric.tyut.findway.base.AppContext;
 import eric.tyut.findway.util.LogUtil;
 
 /**
@@ -56,7 +52,6 @@ public class ModelMain {
                         onSuccess.onResponse(list);
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(AppContext.getContext(), "输入有误", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -95,7 +90,6 @@ public class ModelMain {
                         onSuccess.onResponse(list);
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(AppContext.getContext(), "输入有误", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }

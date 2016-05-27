@@ -9,4 +9,5 @@ public interface IViewMain extends IView {
     public String getFrom();
     public String getTo();
     public void showResult(String fromResponse,String toResponse);
+    void showError(String error);
 }

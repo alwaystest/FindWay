@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -13,6 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import eric.tyut.findway.R;
 import eric.tyut.findway.base.BaseActivity;
+import eric.tyut.findway.di.AppComponent;
 import eric.tyut.findway.di.DaggerMainComponent;
 import eric.tyut.findway.di.MainModule;
 import eric.tyut.findway.show.ResultActivity;
@@ -31,6 +33,8 @@ public class MainActivity extends BaseActivity implements IViewMain {
     @Inject
     IPresenter presenterMain;
 
+    AppComponent appComponent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +42,7 @@ public class MainActivity extends BaseActivity implements IViewMain {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-
-        DaggerMainComponent.builder().mainModule(new MainModule(this)).build().inject(this);
+        DaggerMainComponent.builder().appComponent(appComponent).mainModule(new MainModule(this)).build().inject(this);
 //        presenterMain = new PresenterMain(this);
 
     }
@@ -69,5 +72,15 @@ public class MainActivity extends BaseActivity implements IViewMain {
         intent.putExtra("from", fromResponse);
         intent.putExtra("to", toResponse);
         startActivity(intent);
+    }
+
+    @Override
+    public void showError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    protected void setupAppComponent(AppComponent appComponent) {
+        this.appComponent = appComponent;
     }
 }

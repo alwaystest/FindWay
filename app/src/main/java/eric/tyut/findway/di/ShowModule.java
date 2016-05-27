@@ -1,5 +1,7 @@
 package eric.tyut.findway.di;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 import dagger.Module;
@@ -16,6 +18,7 @@ import eric.tyut.findway.show.ResultAdapter;
 @Module
 public class ShowModule {
     IViewShow mView;
+
     public ShowModule(IViewShow view) {
         mView = view;
     }
@@ -26,12 +29,12 @@ public class ShowModule {
     }
 
     @Provides
-    IPresenter provideIPresenter(IViewShow view){
+    IPresenter provideIPresenter(IViewShow view) {
         return new PresenterShow(view);
     }
 
     @Provides
-    ResultAdapter provideAdapter() {
-        return new ResultAdapter(new ArrayList<Route>());
+    ResultAdapter provideAdapter(Context context) {
+        return new ResultAdapter(context, new ArrayList<Route>());
     }
 }

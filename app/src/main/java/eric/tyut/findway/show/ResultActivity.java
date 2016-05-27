@@ -15,11 +15,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import eric.tyut.findway.R;
 import eric.tyut.findway.base.BaseActivity;
+import eric.tyut.findway.di.AppComponent;
 import eric.tyut.findway.di.DaggerShowComponent;
 import eric.tyut.findway.di.ShowModule;
 import eric.tyut.findway.model.Route;
 
-public class ResultActivity extends BaseActivity implements IViewShow{
+public class ResultActivity extends BaseActivity implements IViewShow {
     @Inject
     IPresenter mPresenter;
     @Inject
@@ -31,18 +32,19 @@ public class ResultActivity extends BaseActivity implements IViewShow{
     @Bind(R.id.recycler_view)
     RecyclerView resultList;
 
+    AppComponent appComponent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        DaggerShowComponent.builder().showModule(new ShowModule(this)).build().inject(this);
+        DaggerShowComponent.builder().appComponent(appComponent).showModule(new ShowModule(this)).build().inject(this);
 
         String from = getIntent().getStringExtra("from");
         String to = getIntent().getStringExtra("to");
 
-        adapter = new ResultAdapter(new ArrayList<Route>());
         resultList.setAdapter(adapter);
         resultList.setLayoutManager(new LinearLayoutManager(this));
         mPresenter.calculate(from, to);
@@ -58,5 +60,10 @@ public class ResultActivity extends BaseActivity implements IViewShow{
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    protected void setupAppComponent(AppComponent appComponent) {
+        this.appComponent = appComponent;
     }
 }

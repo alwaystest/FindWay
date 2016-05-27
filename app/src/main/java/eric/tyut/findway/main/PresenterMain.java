@@ -18,6 +18,9 @@ public class PresenterMain implements IPresenter {
     IViewMain mView;
     ModelMain modelMain;
 
+    String fromResponse = null;
+    String toResponse = null;
+
     @Inject
     public PresenterMain(IViewMain view, ModelMain modelMain) {
         mView = view;
@@ -30,21 +33,29 @@ public class PresenterMain implements IPresenter {
         final String to = mView.getTo();
         LogUtil.d(TAG, from + "\t" + to);
         if (TextUtils.isEmpty(from) || TextUtils.isEmpty(to)) {
-            Toast.makeText(AppContext.getContext(), "输入不能为空", Toast.LENGTH_SHORT).show();
+            mView.showError("输入不能为空");
             return;
         }
         mView.onLoadStart();
         modelMain.loadFrom(from, new Response.Listener<String>() {
             @Override
             public void onResponse(final String FromResponse) {
-                modelMain.loadTo(to, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String ToResponse) {
-                        mView.onLoadComplete();
-                        mView.showResult(FromResponse,ToResponse);
-                    }
-                }, null);
+                fromResponse = FromResponse;
+                ifAllComplete();
             }
         }, null);
+        modelMain.loadTo(to, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String ToResponse) {
+                toResponse = ToResponse;
+                ifAllComplete();
+            }
+        }, null);
+    }
+
+    public void ifAllComplete() {
+        if (TextUtils.isEmpty(fromResponse) || TextUtils.isEmpty(toResponse)) return;
+        mView.onLoadComplete();
+        mView.showResult(fromResponse, toResponse);
     }
 }

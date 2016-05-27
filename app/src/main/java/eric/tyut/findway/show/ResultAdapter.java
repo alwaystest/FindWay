@@ -1,5 +1,6 @@
 package eric.tyut.findway.show;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,13 +34,17 @@ import eric.tyut.findway.model.Route;
  */
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder> {
 
-    RequestQueue queue = Volley.newRequestQueue(AppContext.getContext());
-    HashMap<String, String> cache = new HashMap<>();
+    RequestQueue queue;
+    HashMap<String, String> cache;
+    Context mContext;
 
     private List<Route> mData;
 
-    public ResultAdapter(List<Route> list) {
+    public ResultAdapter(Context context, List<Route> list) {
+        mContext = context;
         mData = list;
+        queue = Volley.newRequestQueue(context);
+        cache = new HashMap<>();
     }
 
     @Override
@@ -59,7 +64,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
                         JSONObject json = new JSONObject(response.substring(1, response.length()));
                         String from = json.getString("name");
                         cache.put(mData.get(position).getFromStation(), from);
-                        if (holder.station.getText().equals(AppContext.getContext().getString(R.string.loading))) {
+                        if (holder.station.getText().equals(mContext.getString(R.string.loading))) {
                             holder.station.setText(from);
                         }
                     } catch (JSONException e) {
