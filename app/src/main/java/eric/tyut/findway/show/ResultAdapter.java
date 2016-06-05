@@ -11,8 +11,6 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -22,12 +20,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import eric.tyut.findway.R;
 import eric.tyut.findway.base.API;
-import eric.tyut.findway.base.AppContext;
-import eric.tyut.findway.model.Route;
+import eric.tyut.findway.model.RouteItem;
 
 /**
  * Created by Mzz on 2016/5/18.
@@ -38,9 +34,9 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     HashMap<String, String> cache;
     Context mContext;
 
-    private List<Route> mData;
+    private List<RouteItem> mData;
 
-    public ResultAdapter(Context context, List<Route> list) {
+    public ResultAdapter(Context context, List<RouteItem> list) {
         mContext = context;
         mData = list;
         queue = Volley.newRequestQueue(context);
@@ -55,35 +51,11 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        if (cache.get(mData.get(position).getFromStation()) == null) {
-            holder.station.setText(R.string.loading);
-            StringRequest req = new StringRequest(Request.Method.POST, API.GET_STATION_BY_ID, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject json = new JSONObject(response.substring(1, response.length()));
-                        String from = json.getString("name");
-                        cache.put(mData.get(position).getFromStation(), from);
-                        if (holder.station.getText().equals(mContext.getString(R.string.loading))) {
-                            holder.station.setText(from);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, null) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("id", mData.get(position).getFromStation());
-                    return map;
-                }
-            };
-            queue.add(req);
+        if (mData.get(position).getmType() == RouteItem.TYPE.TRANSPORT) {
+            onBindTransViewHolder(holder, position);
         } else {
-            holder.station.setText(cache.get(mData.get(position).getFromStation()));
+            onBindStraightViewHolder(holder, position);
         }
-        holder.lineNo.setText(mData.get(position).getTrainNo());
     }
 
     @Override
@@ -97,20 +69,77 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         }
     }
 
-    public void addAll(List<Route> list) {
+    public void addAll(List<RouteItem> list) {
         if (mData != null) {
             mData.addAll(list);
         }
     }
 
+    private void onBindTransViewHolder(final ViewHolder holder, final int position) {
+        if (cache.get(mData.get(position).getTransStationId()) == null) {
+            holder.transStation.setText(R.string.loading);
+            StringRequest req = new StringRequest(Request.Method.POST, API.GET_STATION_BY_ID, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject json = new JSONObject(response.substring(1, response.length()));
+                        String stationName = json.getString("name");
+                        cache.put(mData.get(position).getTransStationId(), stationName);
+                        if (holder.transStation.getText().equals(mContext.getString(R.string.loading))) {
+                            holder.transStation.setText(stationName);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, null) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("id", mData.get(position).getTransStationId());
+                    return map;
+                }
+            };
+            queue.add(req);
+        } else {
+            holder.transStation.setText(cache.get(mData.get(position).getTransStationId()));
+        }
+        holder.type.setText(mContext.getString(R.string.Transport));
+        holder.type.setBackgroundColor(mContext.getResources().getColor(R.color.colorBlue));
+        holder.fromStation.setText(mData.get(position).getFromStation());
+        holder.transStation.setVisibility(View.VISIBLE);
+        holder.toStation.setText(mData.get(position).getToStation());
+        holder.trainNo1.setText(mData.get(position).getTrainNo1());
+        holder.trainNo2.setText(mData.get(position).getTrainNo2());
+        holder.trainNo2.setVisibility(View.VISIBLE);
+    }
+
+    private void onBindStraightViewHolder(final ViewHolder holder, final int position) {
+        holder.type.setText(mContext.getString(R.string.Straight));
+        holder.type.setBackgroundColor(mContext.getResources().getColor(R.color.colorGreen));
+        holder.fromStation.setText(mData.get(position).getFromStation());
+        holder.transStation.setVisibility(View.GONE);
+        holder.toStation.setText(mData.get(position).getToStation());
+        holder.trainNo1.setText(mData.get(position).getTrainNo1());
+        holder.trainNo2.setVisibility(View.GONE);
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView station;
-        TextView lineNo;
+        TextView type;
+        TextView fromStation;
+        TextView transStation;
+        TextView toStation;
+        TextView trainNo1;
+        TextView trainNo2;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            station = (TextView) itemView.findViewById(R.id.tv_station);
-            lineNo = (TextView) itemView.findViewById(R.id.tv_line_no);
+            type = (TextView) itemView.findViewById(R.id.txt_type);
+            fromStation = (TextView) itemView.findViewById(R.id.txt_from_station);
+            toStation = (TextView) itemView.findViewById(R.id.txt_term_station);
+            transStation = (TextView) itemView.findViewById(R.id.txt_trans_station);
+            trainNo1 = (TextView) itemView.findViewById(R.id.txt_line_no_1);
+            trainNo2 = (TextView) itemView.findViewById(R.id.txt_line_no_2);
         }
     }
 }

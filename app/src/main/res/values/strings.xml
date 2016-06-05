@@ -7,4 +7,6 @@
     <string name="start_query">开始查询</string>
     <string name="loading">正在载入</string>
     <string name="Transportation">中转站</string>
+    <string name="Straight">直达</string>
+    <string name="Transport">中转</string>
 </resources>

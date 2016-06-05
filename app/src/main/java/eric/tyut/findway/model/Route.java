@@ -4,10 +4,10 @@ package eric.tyut.findway.model;
  * Created by Mzz on 2016/5/18.
  */
 public class Route {
-    public int id;
-    public String fromStation;
-    public String toStation;
-    public String TrainNo;
+    private int id;
+    private String fromStation;
+    private String toStation;
+    private String TrainNo;
 
     public int getId() {
         return id;

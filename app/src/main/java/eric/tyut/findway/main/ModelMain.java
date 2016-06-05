@@ -53,6 +53,9 @@ public class ModelMain {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (onFailed != null) {
+                        onFailed.onErrorResponse(new VolleyError(e));
+                    }
                 }
             }
         }, new Response.ErrorListener() {
@@ -91,6 +94,9 @@ public class ModelMain {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (onFailed != null) {
+                        onFailed.onErrorResponse(new VolleyError(e));
+                    }
                 }
             }
         }, new Response.ErrorListener() {

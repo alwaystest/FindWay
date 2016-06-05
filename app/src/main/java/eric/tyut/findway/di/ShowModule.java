@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import dagger.Module;
 import dagger.Provides;
+import eric.tyut.findway.model.RouteItem;
 import eric.tyut.findway.show.IPresenter;
-import eric.tyut.findway.model.Route;
 import eric.tyut.findway.show.IViewShow;
 import eric.tyut.findway.show.PresenterShow;
 import eric.tyut.findway.show.ResultAdapter;
@@ -35,6 +35,6 @@ public class ShowModule {
 
     @Provides
     ResultAdapter provideAdapter(Context context) {
-        return new ResultAdapter(context, new ArrayList<Route>());
+        return new ResultAdapter(context, new ArrayList<RouteItem>());
     }
 }

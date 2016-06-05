@@ -15,7 +15,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IView {
     protected String TAG = getClass().getSimpleName();
 
     ProgressDialog pd;
-    AppComponent appComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IView {
     public void onLoadStart() {
         pd = new ProgressDialog(this);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pd.setCanceledOnTouchOutside(false);
         pd.setMessage(getResources().getString(R.string.loading));
         runOnUiThread(new Runnable() {
             @Override

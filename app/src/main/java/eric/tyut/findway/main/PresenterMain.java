@@ -6,6 +6,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
+
 import javax.inject.Inject;
 
 import eric.tyut.findway.base.AppContext;
@@ -51,13 +53,15 @@ public class PresenterMain implements IPresenter {
                 toResponse = ToResponse;
                 ifAllComplete();
             }
-        },  new ErrorListener());
+        }, new ErrorListener());
     }
 
-    public void ifAllComplete() {
+    public synchronized void ifAllComplete() {
         if (TextUtils.isEmpty(fromResponse) || TextUtils.isEmpty(toResponse)) return;
         mView.onLoadComplete();
         mView.showResult(fromResponse, toResponse);
+        fromResponse = null;
+        toResponse = null;
     }
 
     class ErrorListener implements Response.ErrorListener {
@@ -66,7 +70,11 @@ public class PresenterMain implements IPresenter {
             fromResponse = null;
             toResponse = null;
             mView.onLoadComplete();
-            mView.showError("网络故障");
+            if (error.getCause() instanceof JSONException) {
+                mView.showError("输入错误");
+            } else {
+                mView.showError("网络故障");
+            }
         }
     }
 }

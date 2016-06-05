@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.ArrayAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,7 +16,7 @@ import eric.tyut.findway.base.BaseActivity;
 import eric.tyut.findway.di.AppComponent;
 import eric.tyut.findway.di.DaggerShowComponent;
 import eric.tyut.findway.di.ShowModule;
-import eric.tyut.findway.model.Route;
+import eric.tyut.findway.model.RouteItem;
 
 public class ResultActivity extends BaseActivity implements IViewShow {
     @Inject
@@ -44,14 +42,16 @@ public class ResultActivity extends BaseActivity implements IViewShow {
 
         String from = getIntent().getStringExtra("from");
         String to = getIntent().getStringExtra("to");
+        String fromStationName = getIntent().getStringExtra("fromStationName");
+        String toStationName = getIntent().getStringExtra("toStationName");
 
         resultList.setAdapter(adapter);
         resultList.setLayoutManager(new LinearLayoutManager(this));
-        mPresenter.calculate(from, to);
+        mPresenter.calculate(from, to, fromStationName, toStationName);
     }
 
     @Override
-    public void updateList(final List<Route> list) {
+    public void updateList(final List<RouteItem> list) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

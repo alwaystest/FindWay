@@ -71,12 +71,14 @@ public class MainActivity extends BaseActivity implements IViewMain {
         Intent intent = new Intent(this, ResultActivity.class);
         intent.putExtra("from", fromResponse);
         intent.putExtra("to", toResponse);
+        intent.putExtra("fromStationName",getFrom());
+        intent.putExtra("toStationName",getTo());
         startActivity(intent);
     }
 
     @Override
     public void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT);
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
